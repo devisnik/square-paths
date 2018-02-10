@@ -23,32 +23,32 @@ public class Pathfinder {
         System.out.println("tackling number = " + graph.number);
         for (int vertex : nodesByDegree) {
             System.out.println("starting fresh with vertext: " + vertex);
-            List<Integer> path = new LinkedList<>();
+            Path path = new Path(graph.number);
             path.add(vertex);
             if (extend(path))
-                return path;
+                return path.toList();
         }
         return Collections.emptyList();
     }
 
-    private boolean extend(List<Integer> path) {
-        if (path.size() == graph.number) {
+    private boolean extend(Path path) {
+        if (path.isHamiltonian()) {
             return true;
         }
-        for (int neighbor : graph.getNeighbors(path.get(0))) {
+        for (int neighbor : graph.getNeighbors(path.last())) {
             if (path.contains(neighbor)) continue;
-            path.add(0, neighbor);
+            path.add(neighbor);
             if (extend(path)) {
                 return true;
             } else {
-                path.remove(0);
+                path.removeLast();
             }
         }
         return false;
     }
 
     public static void main(String[] args) {
-        for (int number = 15; number < 100; number++) {
+        for (int number = 15; number < 60; number++) {
             System.out.println(number + ": " + new Pathfinder(number).search());
         }
     }
