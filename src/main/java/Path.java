@@ -1,50 +1,51 @@
-import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Path {
 
-    private final List<Integer> nodes;
+    private final int[] nodes;
+    private int currentTop = -1;
     private int number;
     private boolean[] included;
 
     Path(int number) {
         this.number = number;
-        nodes = new LinkedList<Integer>();
+        nodes = new int[number];
         included = new boolean[number];
     }
 
-    public void add(int node) {
+    public void append(int node) {
         if (included[node - 1])
             throw new IllegalStateException("vertex already in path: " + node);
-        nodes.add(0, node);
+        currentTop += 1;
+        nodes[currentTop] = node;
         included[node - 1] = true;
     }
 
     public void removeLast() {
-        Integer node = nodes.remove(0);
+        Integer node = nodes[currentTop];
         included[node - 1] = false;
+        currentTop -= 1;
     }
 
     public int last() {
-        return nodes.get(0);
+        return nodes[currentTop];
     }
 
     public boolean isHamiltonian() {
-        return nodes.size() == number;
+        return currentTop == number - 1;
     }
 
     public int length() {
-        return nodes.size();
+        return currentTop + 1;
     }
 
     public boolean contains(int neighbor) {
-        return included[neighbor-1];
+        return included[neighbor - 1];
     }
 
     public List<Integer> toList() {
-        return Lists.newArrayList(nodes);
+        return Ints.asList(nodes);
     }
 }

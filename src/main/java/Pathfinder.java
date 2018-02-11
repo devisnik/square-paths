@@ -24,7 +24,7 @@ public class Pathfinder {
         for (int vertex : nodesByDegree) {
             System.out.println("starting fresh with vertext: " + vertex);
             Path path = new Path(graph.number);
-            path.add(vertex);
+            path.append(vertex);
             if (extend(path))
                 return path.toList();
         }
@@ -37,7 +37,7 @@ public class Pathfinder {
         }
         for (int neighbor : graph.getNeighbors(path.last())) {
             if (path.contains(neighbor)) continue;
-            path.add(neighbor);
+            path.append(neighbor);
             if (extend(path)) {
                 return true;
             } else {
