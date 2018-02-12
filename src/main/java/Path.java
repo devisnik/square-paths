@@ -37,6 +37,14 @@ public class Path {
         return currentTop == number - 1;
     }
 
+    public boolean canBeClosed() {
+        return isSquare(nodes[0] + nodes[currentTop]);
+    }
+
+    private boolean isSquare(int number) {
+        return Math.sqrt(number) == Math.ceil(Math.sqrt(number));
+    }
+
     public int length() {
         return currentTop + 1;
     }
