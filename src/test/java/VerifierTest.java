@@ -48,4 +48,14 @@ public class VerifierTest {
 
         assertTrue(verifier.isHamiltonianCycle(86));
     }
+
+    @Test
+    public void verifyWrongCycleIn67() {
+        Verifier verifier = new Verifier(
+                1, 3, 6, 10, 15, 21, 4, 5, 11, 14, 50, 31, 18, 7, 2, 23, 26, 38, 43, 57, 64, 17,
+                32, 49, 51, 30, 19, 62, 59, 22, 42, 58, 63, 37, 44, 20, 29, 52, 27, 9, 16, 48, 33, 67,
+                54, 46, 35, 65, 56, 25, 39, 61, 60, 40, 41, 8, 28, 53, 47, 34, 66, 55, 45, 36, 13, 12, 24);
+
+        assertFalse(verifier.isHamiltonianCycle(67));
+    }
 }
