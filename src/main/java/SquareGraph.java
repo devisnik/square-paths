@@ -13,7 +13,7 @@ public class SquareGraph {
         edges = new int[number][];
         for (int vertex = 0; vertex < number; vertex++) {
             List<Integer> neighbors = new ArrayList<>();
-            for (int candidate = 0; candidate < number; candidate++) {
+            for (int candidate = number-1; candidate >=0; candidate--) {
                 if (vertex == candidate) continue;
                 int sum = vertex + 1 + candidate + 1;
                 double root = Math.sqrt(sum);
