@@ -1,8 +1,10 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Pathfinder {
 
     private final SquareGraph graph;
+    private long startTimestamp;
 
     Pathfinder(int number) {
         graph = new SquareGraph(number);
@@ -13,16 +15,11 @@ public class Pathfinder {
         for (int i = 1; i <= graph.number; i++) {
             nodesByDegree.add(i);
         }
-//        Collections.sort(nodesByDegree, new Comparator<Integer>() {
-//            @Override
-//            public int compare(Integer left, Integer right) {
-//                return (graph.degree(left) - graph.degree(right))*(-1);
-//            }
-//        });
 
-        System.out.println("tackling number = " + graph.number);
         for (int vertex : nodesByDegree) {
-            System.out.println("starting fresh with vertext: " + vertex);
+
+            startTimestamp = System.currentTimeMillis();
+
             Path path = new Path(graph.number);
             path.append(vertex);
             if (extend(path))
@@ -35,6 +32,11 @@ public class Pathfinder {
         if (path.isHamiltonian() && path.canBeClosed()) {
             return true;
         }
+
+        if (System.currentTimeMillis() - startTimestamp > TimeUnit.MILLISECONDS.toMillis(100)) {
+            return false;
+        }
+
         for (int neighbor : graph.getNeighbors(path.last())) {
             if (path.contains(neighbor)) continue;
             path.append(neighbor);
@@ -48,9 +50,26 @@ public class Pathfinder {
     }
 
     public static void main(String[] args) {
-        for (int number = 61; number < 70; number++) {
-            System.out.println(number + ": " + new Pathfinder(number).search());
+        for (int number = 32; number <= 1000; number++) {
+            List<Integer> solution = new Pathfinder(number).search();
+            boolean verified = new Verifier(asArray(solution)).isHamiltonianCycle(number);
+            if (!verified) {
+                System.out.println(solution);
+                throw new IllegalStateException("invalid solution for number " + number);
+            }
+            System.out.print(number + ", ");
+//            System.out.println(solution);
+            if (number % 31 == 0)
+                System.out.println();
         }
+    }
+
+    private static int[] asArray(List<Integer> integerList) {
+        int[] array = new int[integerList.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = integerList.get(i);
+        }
+        return array;
     }
 
 }
