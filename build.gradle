@@ -17,3 +17,7 @@ dependencies {
 repositories {
     jcenter()
 }
+
+run {
+    jvmArgs '-Xss256M'
+}
