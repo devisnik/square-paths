@@ -1,12 +1,12 @@
-import com.google.common.primitives.Ints;
-
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Path {
 
+    private final int number;
     private final int[] nodes;
     private int currentTop = -1;
-    private int number;
     private boolean[] included;
 
     Path(int number) {
@@ -54,6 +54,6 @@ public class Path {
     }
 
     public List<Integer> toList() {
-        return Ints.asList(nodes);
+        return IntStream.of(nodes).boxed().collect(Collectors.toList());
     }
 }

@@ -1,17 +1,17 @@
-import com.google.common.primitives.Ints;
-
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Verifier {
 
     private final List<Integer> nodes;
 
     Verifier(int... path) {
-        nodes = Ints.asList(path);
+        nodes = IntStream.of(path).boxed().collect(Collectors.toList());
     }
 
-    boolean isHamiltonianPath(int number) {
-        if (!(nodes.size() == number)) return false;
+    boolean isHamiltonianPath() {
+        int number = nodes.size();
         for (int i = 1; i <= number; i++) {
             if (!nodes.contains(i)) return false;
         }
@@ -22,15 +22,9 @@ public class Verifier {
         return true;
     }
 
-    boolean isHamiltonianCycle(int number) {
-        if (!(nodes.size() == number)) return false;
-        for (int i = 1; i <= number; i++) {
-            if (!nodes.contains(i)) return false;
-        }
-        for (int i = 0; i < number - 1; i++) {
-            if (!isSquare(nodes.get(i) + nodes.get(i + 1)))
-                return false;
-        }
+    boolean isHamiltonianCycle() {
+        if (!isHamiltonianPath()) return false;
+        int number = nodes.size();
         if (!isSquare(nodes.get(0) + nodes.get(number - 1)))
             return false;
         return true;

@@ -13,12 +13,7 @@ public class Pathfinder {
     }
 
     public List<Integer> search() {
-        ArrayList<Integer> nodesByDegree = new ArrayList<>();
-        for (int i = 1; i <= graph.number; i++) {
-            nodesByDegree.add(i);
-        }
-
-        for (int vertex : nodesByDegree) {
+        for (int vertex = 1; vertex <= graph.number; vertex++) {
 
             startTimestamp = System.currentTimeMillis();
 
