@@ -3,7 +3,7 @@ plugins {
     id 'application'
 }
 
-mainClassName = 'Pathfinder'
+mainClassName = 'App'
 
 dependencies {
     implementation 'com.google.guava:guava:23.0'
