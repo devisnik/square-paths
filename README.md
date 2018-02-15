@@ -1,4 +1,4 @@
-Attempts to solves the square-sum puzzle. (see https://www.youtube.com/watch?v=G1m7goLCJDY )
+Attempts to solve the square-sum puzzle. (see https://www.youtube.com/watch?v=G1m7goLCJDY )
 
 ## Hamiltonian Path Problem 
 
