@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.IntStream;
 
 public class SquareGraph {
     final int number;
@@ -9,17 +8,21 @@ public class SquareGraph {
     public SquareGraph(int number) {
         this.number = number;
         edges = new int[number][];
-        for (int vertex = 0; vertex < number; vertex++) {
-            List<Integer> neighbors = new ArrayList<>();
-            for (int candidate = number - 1; candidate >= 0; candidate--) {
-                if (vertex == candidate) continue;
-                int sum = vertex + 1 + candidate + 1;
-                double root = Math.sqrt(sum);
-                boolean isSquare = root == Math.ceil(root);
-                if (isSquare) neighbors.add(candidate);
-            }
-            edges[vertex] = neighbors.stream().mapToInt(v -> v + 1).toArray();
-        }
+        IntStream.range(0, number).forEach(vertex -> {
+            edges[vertex] = IntStream
+                    .rangeClosed(1, number)
+                    .map(v -> number - v)
+                    .filter(v -> v != vertex)
+                    .filter(v -> isSquare(vertex, v))
+                    .map(v -> v + 1)
+                    .toArray();
+        });
+    }
+
+    private static boolean isSquare(int vertex, int candidate) {
+        int sum = vertex + 1 + candidate + 1;
+        double root = Math.sqrt(sum);
+        return root == Math.ceil(root);
     }
 
     public int[] getNeighbors(int vertex) {

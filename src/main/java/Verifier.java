@@ -11,26 +11,18 @@ public class Verifier {
     }
 
     boolean isHamiltonianPath() {
-        int number = nodes.size();
-        for (int i = 1; i <= number; i++) {
-            if (!nodes.contains(i)) return false;
-        }
-        for (int i = 0; i < number - 1; i++) {
-            if (!isSquare(nodes.get(i) + nodes.get(i + 1)))
-                return false;
-        }
-        return true;
+        boolean allNodes = IntStream.rangeClosed(1, nodes.size()).allMatch(v -> nodes.contains(v));
+        boolean allSquares = IntStream.range(0, nodes.size() -1).allMatch(v -> isSquare(nodes.get(v) + nodes.get(v + 1)));
+        return allNodes && allSquares;
     }
 
     boolean isHamiltonianCycle() {
-        if (!isHamiltonianPath()) return false;
         int number = nodes.size();
-        if (!isSquare(nodes.get(0) + nodes.get(number - 1)))
-            return false;
-        return true;
+        return isHamiltonianPath() && isSquare(nodes.get(0) + nodes.get(number - 1));
     }
 
     private boolean isSquare(int number) {
-        return Math.sqrt(number) == Math.ceil(Math.sqrt(number));
+        double sqrt = Math.sqrt(number);
+        return sqrt == Math.ceil(sqrt);
     }
 }
