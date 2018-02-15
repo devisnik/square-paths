@@ -1,11 +1,11 @@
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Pathfinder {
 
     private final SquareGraph graph;
-    private long startTimestamp;
+    private Instant endTime;
 
     Pathfinder(int number) {
         graph = new SquareGraph(number);
@@ -14,7 +14,9 @@ public class Pathfinder {
     public List<Integer> search() {
         for (int vertex = 1; vertex <= graph.number; vertex++) {
 
-            startTimestamp = System.currentTimeMillis();
+            // we give up for each vertex after some short time period,
+            // turns out it is long enough for some vertex eventually
+            endTime = Instant.now().plusMillis(100);
 
             Path path = new Path(graph.number);
             path.append(vertex);
@@ -29,9 +31,7 @@ public class Pathfinder {
             return true;
         }
 
-        if (System.currentTimeMillis() - startTimestamp > TimeUnit.MILLISECONDS.toMillis(100)) {
-            return false;
-        }
+        if (Instant.now().isAfter(endTime)) return false;
 
         for (int neighbor : graph.getNeighbors(path.last())) {
             if (path.contains(neighbor)) continue;
