@@ -22,7 +22,7 @@ the sum of any two adjacent numbers is a square number.
 
 ## Program
 
-Finds hamiltonian cycles for n with 32 <= n <= 3000. 
+Finds hamiltonian cycles for n with 32 <= n <= 10000. 
 The algorithm recurses and is as such limited by java's stack size limit.
 
 ### Usage
