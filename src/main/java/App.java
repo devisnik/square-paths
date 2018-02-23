@@ -4,7 +4,8 @@ public class App {
 
     public static void main(String[] args) {
         for (int number = 32; number <= 10000; number++) {
-            List<Integer> solution = new Pathfinder(number).search();
+            SquareGraph graph = new SquareGraph(number);
+            List<Integer> solution = new Pathfinder(graph).search(100);
             boolean verified = new Verifier(asArray(solution)).isHamiltonianCycle();
             if (!verified) {
                 System.out.println(solution);

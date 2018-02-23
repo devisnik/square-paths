@@ -7,16 +7,16 @@ public class Pathfinder {
     private final SquareGraph graph;
     private Instant endTime;
 
-    Pathfinder(int number) {
-        graph = new SquareGraph(number);
+    Pathfinder(SquareGraph graph) {
+        this.graph = graph;
     }
 
-    public List<Integer> search() {
+    public List<Integer> search(long searchDurationPerVertexInMs) {
         for (int vertex = 1; vertex <= graph.number; vertex++) {
 
             // we give up for each vertex after some short time period,
             // turns out it is long enough for some vertex eventually
-            endTime = Instant.now().plusMillis(100);
+            endTime = Instant.now().plusMillis(searchDurationPerVertexInMs);
 
             Path path = new Path(graph.number);
             path.append(vertex);

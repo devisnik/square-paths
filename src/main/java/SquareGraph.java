@@ -20,9 +20,7 @@ public class SquareGraph {
     }
 
     private static boolean isSquare(int vertex, int candidate) {
-        int sum = vertex + 1 + candidate + 1;
-        double root = Math.sqrt(sum);
-        return root == Math.ceil(root);
+        return Edges.isSquare(vertex + 1, candidate + 1);
     }
 
     public int[] getNeighbors(int vertex) {
