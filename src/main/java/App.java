@@ -10,7 +10,7 @@ public class App {
             while (!done) {
                 searchDurationMs *= 2;
                 List<Integer> solution = new Pathfinder(graph).search(searchDurationMs);
-                boolean verified = !solution.isEmpty() && new Verifier(asArray(solution)).isHamiltonianCycle();
+                boolean verified = !solution.isEmpty() && new Verifier(asArray(solution)).isHamiltonianCycle(number);
                 done = verified || searchDurationMs >= 1000;
                 if (done) {
                     System.out.print(number + ", ");

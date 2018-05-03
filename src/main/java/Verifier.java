@@ -10,15 +10,15 @@ public class Verifier {
         nodes = IntStream.of(path).boxed().collect(Collectors.toList());
     }
 
-    boolean isHamiltonianPath() {
+    boolean isHamiltonianPath(int n) {
         boolean allNodes = IntStream.rangeClosed(1, nodes.size()).allMatch(v -> nodes.contains(v));
         boolean allSquares = IntStream.range(0, nodes.size() -1).allMatch(v -> isSquare(nodes.get(v) + nodes.get(v + 1)));
-        return allNodes && allSquares;
+        return nodes.size() == n && allNodes && allSquares;
     }
 
-    boolean isHamiltonianCycle() {
+    boolean isHamiltonianCycle(int n) {
         int number = nodes.size();
-        return isHamiltonianPath() && isSquare(nodes.get(0) + nodes.get(number - 1));
+        return isHamiltonianPath(n) && isSquare(nodes.get(0) + nodes.get(number - 1));
     }
 
     private boolean isSquare(int number) {
