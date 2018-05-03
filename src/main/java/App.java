@@ -3,18 +3,24 @@ import java.util.List;
 public class App {
 
     public static void main(String[] args) {
-        for (int number = 32; number <= 10000; number++) {
+        for (int number = 32; number <= 10_000; number++) {
             SquareGraph graph = new SquareGraph(number);
-            List<Integer> solution = new Pathfinder(graph).search(100);
-            boolean verified = new Verifier(asArray(solution)).isHamiltonianCycle();
-            if (!verified) {
-                System.out.println(solution);
-                throw new IllegalStateException("invalid solution for number " + number);
+            boolean done = false;
+            int searchDurationMs = 1;
+            while (!done) {
+                searchDurationMs *= 2;
+                List<Integer> solution = new Pathfinder(graph).search(searchDurationMs);
+                boolean verified = !solution.isEmpty() && new Verifier(asArray(solution)).isHamiltonianCycle();
+                done = verified || searchDurationMs >= 1000;
+                if (done) {
+                    System.out.print(number + ", ");
+                    System.out.print(solution);
+                    System.out.println();
+                    if (!verified) {
+                        throw new IllegalStateException("no solution found for number " + number);
+                    }
+                }
             }
-            System.out.print(number + ", ");
-//            System.out.println(solution);
-            if (number % 31 == 0)
-                System.out.println();
         }
     }
 
