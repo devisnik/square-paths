@@ -11,7 +11,7 @@ public class Verifier {
     }
 
     boolean isHamiltonianPath(int n) {
-        boolean allNodes = IntStream.rangeClosed(1, nodes.size()).allMatch(v -> nodes.contains(v));
+        boolean allNodes = IntStream.rangeClosed(1, nodes.size()).allMatch(nodes::contains);
         boolean allSquares = IntStream.range(0, nodes.size() -1).allMatch(v -> isSquare(nodes.get(v) + nodes.get(v + 1)));
         return nodes.size() == n && allNodes && allSquares;
     }

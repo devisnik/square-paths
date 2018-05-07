@@ -9,21 +9,28 @@ public class VerifierTest {
     public void verifiedNonHamiltonianPath() {
         Verifier verifier = new Verifier(1, 2, 3, 4);
 
-        assertFalse(verifier.isHamiltonianPath());
+        assertFalse(verifier.isHamiltonianPath(4));
+    }
+
+    @Test
+    public void verifiesPathLengthConsidered() {
+        Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
+
+        assertFalse(verifier.isHamiltonianPath(14));
     }
 
     @Test
     public void verifiesPath15() {
         Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
 
-        assertTrue(verifier.isHamiltonianPath());
+        assertTrue(verifier.isHamiltonianPath(15));
     }
 
     @Test
     public void verifiesNoCycle15() {
         Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
 
-        assertFalse(verifier.isHamiltonianCycle());
+        assertFalse(verifier.isHamiltonianCycle(15));
     }
 
     @Test
@@ -33,7 +40,7 @@ public class VerifierTest {
                 29, 52, 69, 75, 46, 54, 67, 77, 23, 58, 63, 81, 40, 60, 61, 83, 38, 43, 57, 24, 76, 45, 36, 64, 80, 41,
                 59, 62, 82, 18, 31, 33, 48, 73, 71);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(83));
     }
 
     @Test
@@ -43,7 +50,7 @@ public class VerifierTest {
                 85, 59, 41, 80, 64, 57, 43, 38, 62, 82, 18, 7, 2, 14, 50, 31, 33, 48, 73, 71, 29, 52, 69, 75, 46, 54,
                 67, 77, 23, 58, 63, 81, 40, 24, 76, 68, 32, 49, 72);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(86));
     }
 
     @Test
@@ -51,7 +58,7 @@ public class VerifierTest {
         Verifier verifier = new Verifier(34, 30, 6, 19, 17, 32, 4, 21, 28, 8, 1, 3, 13, 12, 24, 25, 11, 5, 20, 29, 7,
                 18, 31, 33, 16, 9, 27, 22, 14, 2, 23, 26, 10, 15);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(34));
     }
 
     @Test
@@ -60,7 +67,7 @@ public class VerifierTest {
                 17, 32, 49, 51, 30, 19, 62, 59, 22, 42, 58, 63, 37, 44, 20, 29, 52, 27, 9, 16, 48, 33, 67, 54, 46, 35,
                 65, 56, 25, 39, 61, 60, 40, 41, 8, 28, 53, 47, 34, 66, 55, 45, 36, 13, 12, 24);
 
-        assertFalse(verifier.isHamiltonianCycle());
+        assertFalse(verifier.isHamiltonianCycle(67));
     }
 
     @Test
@@ -72,7 +79,7 @@ public class VerifierTest {
                 27, 22, 3, 13, 36, 45, 19, 6, 10, 15, 21, 28, 53, 47, 2, 23, 26, 38, 43, 57, 64, 17, 8, 1, 24, 25, 11,
                 5, 4, 12);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(121));
     }
 
     @Test
@@ -125,7 +132,7 @@ public class VerifierTest {
                 76, 45, 36, 28, 72, 49, 51, 30, 34, 66, 15, 21, 4, 32, 17, 47, 2, 98, 46, 35, 14, 50, 31, 18, 7, 29, 52,
                 12, 69, 75, 25, 11, 38, 62, 19, 6, 10, 26, 23, 13, 3, 33, 48, 16, 20, 44, 5, 59, 22, 27, 9, 40, 41, 8);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(1000));
     }
 
     @Test
@@ -270,8 +277,8 @@ public class VerifierTest {
                 2057, 1787, 1022, 1187, 2413, 1812);
 
 
-        assertTrue(verifier.isHamiltonianPath());
-        assertFalse(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianPath(2500));
+        assertFalse(verifier.isHamiltonianCycle(2500));
     }
 
     @Test
@@ -442,7 +449,7 @@ public class VerifierTest {
                 92, 29, 35, 65, 79, 42, 58, 111, 33, 48, 16, 20, 44, 56, 25, 24, 40, 60, 21, 28, 72, 9, 7, 18, 31, 50,
                 14, 11, 5, 4, 32, 49, 15, 34, 2, 47, 17, 8, 1, 3, 22, 27, 54, 10, 6, 19, 30, 51, 13, 12, 37);
 
-        assertTrue(verifier.isHamiltonianCycle());
+        assertTrue(verifier.isHamiltonianCycle(3000));
     }
 
 }
