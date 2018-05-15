@@ -1,90 +1,93 @@
-import org.junit.Test;
+package util
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
-public class VerifierTest {
+private val SQUARES = SquareCache(10_000)
+
+class VerifierTest {
 
     @Test
-    public void verifiedNonHamiltonianPath() {
-        Verifier verifier = new Verifier(1, 2, 3, 4);
+    fun `detects too short paths`() {
+        val verifier = Verifier(listOf(3, 4), SQUARES)
 
-        assertFalse(verifier.isHamiltonianPath(4));
+        assertFalse(verifier.isHamiltonianPath(4))
     }
 
     @Test
-    public void verifiesPathLengthConsidered() {
-        Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
+    fun `detects missing vertices`() {
+        val verifier = Verifier(listOf(2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8), SQUARES)
 
-        assertFalse(verifier.isHamiltonianPath(14));
+        assertFalse(verifier.isHamiltonianPath(14))
     }
 
     @Test
-    public void verifiesPath15() {
-        Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
+    fun `verifies path on 15 vertices`() {
+        val verifier = Verifier(listOf(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8), SQUARES)
 
-        assertTrue(verifier.isHamiltonianPath(15));
+        assertTrue(verifier.isHamiltonianPath(15))
     }
 
     @Test
-    public void verifiesNoCycle15() {
-        Verifier verifier = new Verifier(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8);
+    fun `path 15 is not a cycle`() {
+        val verifier = Verifier(listOf(9, 7, 2, 14, 11, 5, 4, 12, 13, 3, 6, 10, 15, 1, 8), SQUARES)
 
-        assertFalse(verifier.isHamiltonianCycle(15));
+        assertFalse(verifier.isHamiltonianCycle(15))
     }
 
     @Test
-    public void verifiesCycle83() {
-        Verifier verifier = new Verifier(50, 14, 2, 7, 9, 16, 20, 5, 4, 12, 13, 3, 1, 8, 17, 19, 6, 10, 15, 21, 28, 72,
+    fun `verifies cycle on 83 vertices`() {
+        val verifier = Verifier(listOf(50, 14, 2, 7, 9, 16, 20, 5, 4, 12, 13, 3, 1, 8, 17, 19, 6, 10, 15, 21, 28, 72,
                 49, 32, 68, 53, 11, 70, 51, 30, 34, 47, 74, 26, 55, 66, 78, 22, 27, 37, 44, 56, 25, 39, 42, 79, 65, 35,
                 29, 52, 69, 75, 46, 54, 67, 77, 23, 58, 63, 81, 40, 60, 61, 83, 38, 43, 57, 24, 76, 45, 36, 64, 80, 41,
-                59, 62, 82, 18, 31, 33, 48, 73, 71);
+                59, 62, 82, 18, 31, 33, 48, 73, 71), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(83));
+        assertTrue(verifier.isHamiltonianCycle(83))
     }
 
     @Test
-    public void verifiesCycle86() {
-        Verifier verifier = new Verifier(9, 16, 20, 5, 4, 12, 13, 3, 1, 8, 17, 19, 6, 10, 15, 21, 28, 36, 45, 55, 26,
+    fun `verifies cycle on 86 vertices`() {
+        val verifier = Verifier(listOf(9, 16, 20, 5, 4, 12, 13, 3, 1, 8, 17, 19, 6, 10, 15, 21, 28, 36, 45, 55, 26,
                 74, 47, 53, 11, 70, 51, 30, 34, 66, 78, 22, 27, 37, 44, 56, 25, 39, 42, 79, 65, 35, 86, 83, 61, 60, 84,
                 85, 59, 41, 80, 64, 57, 43, 38, 62, 82, 18, 7, 2, 14, 50, 31, 33, 48, 73, 71, 29, 52, 69, 75, 46, 54,
-                67, 77, 23, 58, 63, 81, 40, 24, 76, 68, 32, 49, 72);
+                67, 77, 23, 58, 63, 81, 40, 24, 76, 68, 32, 49, 72), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(86));
+        assertTrue(verifier.isHamiltonianCycle(86))
     }
 
     @Test
-    public void verifiesCycle34() {
-        Verifier verifier = new Verifier(34, 30, 6, 19, 17, 32, 4, 21, 28, 8, 1, 3, 13, 12, 24, 25, 11, 5, 20, 29, 7,
-                18, 31, 33, 16, 9, 27, 22, 14, 2, 23, 26, 10, 15);
+    fun `verifies cycle on 34 vertices`() {
+        val verifier = Verifier(listOf(34, 30, 6, 19, 17, 32, 4, 21, 28, 8, 1, 3, 13, 12, 24, 25, 11, 5, 20, 29, 7,
+                18, 31, 33, 16, 9, 27, 22, 14, 2, 23, 26, 10, 15), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(34));
+        assertTrue(verifier.isHamiltonianCycle(34))
     }
 
     @Test
-    public void verifiesWrongCycle67() {
-        Verifier verifier = new Verifier(1, 3, 6, 10, 15, 21, 4, 5, 11, 14, 50, 31, 18, 7, 2, 23, 26, 38, 43, 57, 64,
+    fun `detects wrong cycle on 67 vertices`() {
+        val verifier = Verifier(listOf(1, 3, 6, 10, 15, 21, 4, 5, 11, 14, 50, 31, 18, 7, 2, 23, 26, 38, 43, 57, 64,
                 17, 32, 49, 51, 30, 19, 62, 59, 22, 42, 58, 63, 37, 44, 20, 29, 52, 27, 9, 16, 48, 33, 67, 54, 46, 35,
-                65, 56, 25, 39, 61, 60, 40, 41, 8, 28, 53, 47, 34, 66, 55, 45, 36, 13, 12, 24);
+                65, 56, 25, 39, 61, 60, 40, 41, 8, 28, 53, 47, 34, 66, 55, 45, 36, 13, 12, 24), SQUARES)
 
-        assertFalse(verifier.isHamiltonianCycle(67));
+        assertFalse(verifier.isHamiltonianCycle(67))
     }
 
     @Test
-    public void verifiesCycle121() {
-        Verifier verifier = new Verifier(37, 107, 118, 78, 91, 105, 120, 76, 93, 103, 66, 55, 114, 111, 85, 84, 112,
+    fun `verifies cycle on 121 vertices`() {
+        val verifier = Verifier(listOf(37, 107, 118, 78, 91, 105, 120, 76, 93, 103, 66, 55, 114, 111, 85, 84, 112,
                 113, 83, 86, 110, 115, 81, 88, 108, 117, 79, 90, 106, 119, 77, 92, 104, 121, 75, 94, 102, 67, 54, 46,
                 98, 71, 73, 96, 100, 69, 52, 48, 33, 31, 50, 14, 35, 109, 116, 80, 89, 32, 68, 101, 95, 74, 70, 99, 97,
                 72, 49, 51, 30, 34, 87, 82, 62, 59, 41, 40, 60, 61, 39, 42, 58, 63, 18, 7, 29, 20, 44, 56, 65, 16, 9,
                 27, 22, 3, 13, 36, 45, 19, 6, 10, 15, 21, 28, 53, 47, 2, 23, 26, 38, 43, 57, 64, 17, 8, 1, 24, 25, 11,
-                5, 4, 12);
+                5, 4, 12), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(121));
+        assertTrue(verifier.isHamiltonianCycle(121))
     }
 
     @Test
-    public void verifiesCycle1000() {
-        Verifier verifier = new Verifier(1, 960, 976, 873, 891, 958, 978, 871, 893, 956, 980, 869, 895, 954, 982, 867,
+    fun `verifies cycle on 1000 vertices`() {
+        val verifier = Verifier(listOf(1, 960, 976, 873, 891, 958, 978, 871, 893, 956, 980, 869, 895, 954, 982, 867,
                 897, 952, 984, 865, 899, 950, 986, 863, 901, 948, 988, 861, 903, 946, 990, 859, 905, 944, 992, 857, 907,
                 942, 994, 855, 909, 940, 996, 853, 911, 938, 998, 851, 913, 936, 1000, 849, 915, 934, 830, 770, 751,
                 930, 919, 845, 836, 928, 921, 843, 838, 926, 923, 841, 840, 924, 925, 839, 842, 922, 927, 837, 844, 920,
@@ -130,16 +133,16 @@ public class VerifierTest {
                 165, 124, 132, 93, 103, 122, 134, 91, 105, 64, 80, 145, 144, 81, 88, 108, 61, 60, 109, 116, 53, 68, 128,
                 97, 99, 70, 74, 95, 101, 43, 78, 118, 107, 89, 55, 114, 111, 85, 84, 37, 63, 58, 42, 39, 82, 87, 57, 24,
                 76, 45, 36, 28, 72, 49, 51, 30, 34, 66, 15, 21, 4, 32, 17, 47, 2, 98, 46, 35, 14, 50, 31, 18, 7, 29, 52,
-                12, 69, 75, 25, 11, 38, 62, 19, 6, 10, 26, 23, 13, 3, 33, 48, 16, 20, 44, 5, 59, 22, 27, 9, 40, 41, 8);
+                12, 69, 75, 25, 11, 38, 62, 19, 6, 10, 26, 23, 13, 3, 33, 48, 16, 20, 44, 5, 59, 22, 27, 9, 40, 41, 8), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(1000));
+        assertTrue(verifier.isHamiltonianCycle(1000))
     }
 
     @Test
-    public void verifiesPath2500() {
+    fun `verifies path on 2500 vertices`() {
 
         // found at http://community.wolfram.com/groups/-/m/t/1264240
-        Verifier verifier = new Verifier(64, 1700, 416, 1985, 1984, 41, 1115, 1001, 295, 434, 7, 1437, 1372, 1229, 535,
+        val verifier = Verifier(listOf(64, 1700, 416, 1985, 1984, 41, 1115, 1001, 295, 434, 7, 1437, 1372, 1229, 535,
                 2066, 2423, 941, 1175, 1850, 2375, 26, 2183, 1181, 2300, 1544, 1057, 1152, 369, 1000, 2364, 1861, 164,
                 32, 2468, 448, 1953, 963, 1537, 1944, 865, 1071, 1138, 383, 101, 1663, 1253, 2111, 2245, 780, 1720,
                 1089, 1512, 252, 837, 927, 1474, 2495, 1994, 710, 251, 1958, 158, 131, 598, 1518, 1731, 1294, 822, 403,
@@ -274,16 +277,16 @@ public class VerifierTest {
                 583, 201, 2008, 696, 1705, 1776, 528, 496, 1185, 1840, 2256, 1108, 2141, 2084, 1516, 420, 2389, 1455,
                 1045, 476, 1640, 2329, 2432, 1412, 1724, 1757, 547, 609, 1072, 1428, 172, 24, 1065, 1639, 2330, 2026,
                 575, 650, 1031, 1778, 526, 1590, 1219, 2381, 428, 661, 1839, 1642, 474, 426, 358, 2043, 166, 858, 1543,
-                2057, 1787, 1022, 1187, 2413, 1812);
+                2057, 1787, 1022, 1187, 2413, 1812), SQUARES)
 
 
-        assertTrue(verifier.isHamiltonianPath(2500));
-        assertFalse(verifier.isHamiltonianCycle(2500));
+        assertTrue(verifier.isHamiltonianPath(2500))
+        assertFalse(verifier.isHamiltonianCycle(2500))
     }
 
     @Test
-    public void verifiesCycle3000() {
-        Verifier verifier = new Verifier(84, 2941, 2988, 2788, 2837, 2939, 2990, 2786, 2839, 2937, 2992, 2784, 2841,
+    fun `verifies cycle on 3000 vertices`() {
+        val verifier = Verifier(listOf(84, 2941, 2988, 2788, 2837, 2939, 2990, 2786, 2839, 2937, 2992, 2784, 2841,
                 2935, 2994, 2782, 2843, 2933, 2996, 2780, 2845, 2931, 2998, 2778, 2847, 2929, 3000, 2776, 2849, 2927,
                 2698, 2631, 2553, 2923, 2853, 2772, 2704, 2921, 2855, 2770, 2706, 2919, 2857, 2768, 2708, 2917, 2859,
                 2766, 2710, 2915, 2861, 2764, 2712, 2913, 2863, 2762, 2714, 2911, 2865, 2760, 2716, 2909, 2867, 2758,
@@ -447,9 +450,9 @@ public class VerifierTest {
                 86, 83, 61, 135, 90, 106, 63, 81, 88, 108, 36, 64, 132, 93, 103, 122, 134, 155, 169, 87, 109, 116, 53,
                 91, 105, 39, 82, 62, 59, 41, 128, 97, 99, 70, 74, 95, 101, 68, 76, 45, 55, 66, 78, 43, 38, 26, 23, 77,
                 92, 29, 35, 65, 79, 42, 58, 111, 33, 48, 16, 20, 44, 56, 25, 24, 40, 60, 21, 28, 72, 9, 7, 18, 31, 50,
-                14, 11, 5, 4, 32, 49, 15, 34, 2, 47, 17, 8, 1, 3, 22, 27, 54, 10, 6, 19, 30, 51, 13, 12, 37);
+                14, 11, 5, 4, 32, 49, 15, 34, 2, 47, 17, 8, 1, 3, 22, 27, 54, 10, 6, 19, 30, 51, 13, 12, 37), SQUARES)
 
-        assertTrue(verifier.isHamiltonianCycle(3000));
+        assertTrue(verifier.isHamiltonianCycle(3000))
     }
 
 }
