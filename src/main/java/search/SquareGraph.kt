@@ -1,21 +1,25 @@
 package search
 
-import util.Edges
+import util.SquareCache
 
-import java.util.stream.IntStream
+class SquareGraph(val number: Int, squareCache: SquareCache = SquareCache(2 * number)) {
 
-class SquareGraph(val number: Int) {
+    private val edges: Array<IntArray>
 
-    private val edges: Array<IntArray> = Array(number) { vertex ->
-        (1..number)
-                .map { v -> number - v }
-                .filter { v -> v != vertex }
-                .filter { v -> isSquare(vertex, v) }
-                .map { v -> v + 1 }
-                .toIntArray()
+    init {
+        val squares = (1 until 2 * number).filter(squareCache::contains)
+        edges = Array(number) { index ->
+            val startNode = index + 1
+            val neighbors = mutableListOf<Int>()
+            squares
+                    .filter { it != startNode }
+                    .forEach { s ->
+                        val endNode = s - startNode
+                        if (endNode in 1..number) neighbors += endNode
+                    }
+            neighbors.sortedDescending().toIntArray()
+        }
     }
-
-    private fun isSquare(vertex: Int, candidate: Int) = Edges.isSquare(vertex + 1, candidate + 1)
 
     fun getNeighbors(vertex: Int): IntArray = edges[vertex - 1]
 
