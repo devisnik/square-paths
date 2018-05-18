@@ -1,7 +1,6 @@
 package search
 
 import java.time.Instant
-import java.util.Collections
 
 class Pathfinder(private val graph: SquareGraph) {
 

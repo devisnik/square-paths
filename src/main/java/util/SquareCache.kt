@@ -1,5 +1,7 @@
 package util
 
+val squareCache = SquareCache(5_000_000)
+
 class SquareCache(upperLimit: Int) {
 
     private val cache: BooleanArray = BooleanArray(upperLimit)

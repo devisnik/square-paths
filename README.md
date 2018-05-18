@@ -27,7 +27,7 @@ The algorithm recurses and is as such limited by java's stack size limit.
 
 ## Program 2: Extends cycles via cutting and re-inserting
 
-The algorithm has been verified to find hamiltonian cycles for n with 50 <= n <= 500_000.
+The algorithm has been verified to find hamiltonian cycles for n with 50 <= n <= 1_000_000.
 
 ### Usage
 
