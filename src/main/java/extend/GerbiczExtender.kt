@@ -20,7 +20,7 @@ object GerbiczExtender {
         val squares = squaresIn(number + 1 until 2 * number)
         return indexPairs()
                 .takeWhile { it.second < squares.size }
-                .flatMap { (a,b) -> sequenceOf(a to b, b to a) }
+                .flatMap { (a, b) -> sequenceOf(a to b, b to a) }
                 .map { (a, b) -> squares[a] to squares[b] }
     }
 
@@ -36,8 +36,8 @@ object GerbiczExtender {
     fun extend(extendee: Cycle): Cycle? {
         val cycle = extendee.withNewNode()
         val edge = cycleExtenders(extendee).firstOrNull() ?: return null
-        val cut = cycle.replace(edge, listOf(extendee.maxNumber + 1))
-        cycle.replace(edge.second to cycle.next(edge.second), cut.reversed())
+        val cut = cycle.replace(edge, Pair(extendee.maxNumber + 1, extendee.maxNumber + 1), false)
+        if (cut != null) cycle.replace(edge.second to cycle.next(edge.second), cut, true)
         return cycle
     }
 }

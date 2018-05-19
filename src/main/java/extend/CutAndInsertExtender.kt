@@ -35,23 +35,40 @@ object CutAndInsertExtender {
                             Pair(p, extendee.reversed())
                     }
 
+    private inline fun extensions(source: IntArray, extendee: Pair<Int, Int>): Sequence<Triple<Pair<Int, Int>, Pair<Int, Int>, Boolean>> =
+            cutouts(source)
+                    .filter { p ->
+                        val firstExtendee = extendee.first
+                        val lastExtendee = extendee.second
+                        isSquare(p.first, firstExtendee) && isSquare(p.second, lastExtendee)
+                                || isSquare(p.first, lastExtendee) && isSquare(p.second, firstExtendee)
+                    }
+                    .map { p ->
+                        if (isSquare(p.first, extendee.first) && isSquare(p.second, extendee.second))
+                            Triple(p, extendee, false)
+                        else
+                            Triple(p, extendee, true)
+                    }
+
     private inline fun isSquare(left: Int, right: Int): Boolean = squareCache.contains(left + right)
 
     fun extend(extendee: Cycle): Cycle? {
         val forbidden: MutableList<Pair<Int, Int>> = mutableListOf()
-        var ext: List<Int> = listOf(extendee.maxNumber + 1)
         val cycle = extendee.withNewNode()
+        var ext: Pair<Int, Int>? = Pair(cycle.maxNumber, cycle.maxNumber)
+        var cycleStart = (1..cycle.maxNumber).first { squareCache.contains(it + cycle.maxNumber)}
         var count = 0
-        while (ext.isNotEmpty()) {
+        while (ext != null) {
 //        println("forbidden: $forbidden")
 //        println("current cycle ${cycle.toList().toList()}")
             try {
-                val (pair, list) = extensions(cycle.toList(), ext)
+                val (pair, segment, reverse) = extensions(cycle.toList(cycleStart), ext)
                         .filterNot { e -> forbidden.contains(e.first) }
                         .first()
 //        println("${pair}: ${pair.distance(cycle)} $list")
                 forbidden += arrayOf(pair, pair.reversed())
-                ext = cycle.replace(pair, list)
+                ext = cycle.replace(pair, segment, reverse)
+                cycleStart = pair.second
 //        println(ext)
                 count++
             } catch (e: Exception) {

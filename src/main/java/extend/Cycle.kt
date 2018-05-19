@@ -4,6 +4,7 @@ import util.SquareCache
 import util.squareCache
 
 fun cycleOf(edgeList: List<Int>) = Cycle(edgeList.size, edgeList.toIntArray())
+fun cycleOf(edgeList: IntArray) = Cycle(edgeList.size, edgeList)
 
 class Cycle private constructor(
         val maxNumber: Int,
@@ -12,50 +13,56 @@ class Cycle private constructor(
 ) {
 
     constructor(maxNumber: Int, nodes: IntArray, squares: SquareCache = squareCache) :
-            this(maxNumber, squares, IntArray(maxNumber + 1) { _ -> -1 })
-    {
+            this(maxNumber, squares, IntArray(maxNumber + 1) { _ -> -1 }) {
         nodes.forEachIndexed { index, node ->
             edgeList[node] = nodes[(index + 1) % nodes.size]
         }
     }
 
-    fun withNewNode() : Cycle = Cycle(maxNumber+1, squares, edgeList + intArrayOf(-1))
+    fun withNewNode(): Cycle = Cycle(maxNumber + 1, squares, edgeList + intArrayOf(-1))
 
-    private fun cut(from: Int, to: Int): List<Int> {
-        val cutout = arrayListOf<Int>()
+    private fun cut(from: Int, to: Int): Pair<Int, Int>? {
+        val start = next(from)
+        if (start == to) return null
         var node = from
         while (edgeList[node] != to) {
             val target = edgeList[node]
-            cutout += target
-            edgeList[node] = -1
             node = target
         }
         edgeList[node] = -1
         edgeList[from] = to
-        return cutout
+        return start to node
     }
 
-    private fun replace(from: Int, to: Int, path: List<Int>): List<Int> {
-        val cut = cut(from, to)
-        insertAt(from, path)
+    fun replace(edge: Pair<Int, Int>, segment: Pair<Int, Int>, reversed: Boolean = false): Pair<Int, Int>? {
+        val cut = cut(edge.first, edge.second)
+        if (reversed) {
+            reverse(segment)
+            edgeList[edge.first] = segment.second
+            edgeList[segment.first] = edge.second
+        } else {
+            edgeList[edge.first] = segment.first
+            edgeList[segment.second] = edge.second
+        }
         return cut
     }
 
-    fun replace(edge: Pair<Int, Int>, path: List<Int>) = replace(edge.first, edge.second, path)
-
-    private fun insertAt(start: Int, path: List<Int>) {
-        val end = edgeList[start]
-        val newEdges = listOf(start).plus(path).plus(end)
-        (0 until newEdges.size - 1).forEach { index ->
-            edgeList[newEdges[index]] = newEdges[index + 1]
+    private fun reverse(segment: Pair<Int, Int>) {
+        if (segment.first == segment.second) return
+        var current = segment.first
+        var next = next(current)
+        while (current != segment.second) {
+            val previous = current
+            current = next
+            next = next(current)
+            edgeList[current] = previous
         }
     }
 
     override fun toString() = toList().toList().toString()
 
-    fun toList(): IntArray {
-        val startNode = (0 until edgeList.size).first { edgeList[it] != -1 }
-        val nodeList = IntArray(edgeList.size -1)
+    fun toList(startNode: Int = 1): IntArray {
+        val nodeList = IntArray(edgeList.size - 1)
         var current = startNode
         var index = 0
         do {

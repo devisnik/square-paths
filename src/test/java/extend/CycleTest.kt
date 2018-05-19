@@ -41,5 +41,55 @@ class CycleTest {
         Assert.assertEquals(false, cycle.isHamiltonian())
     }
 
+    @Test
+    fun `inserts a node into an edge`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4)).withNewNode()
+        cycle.replace(2 to 3, 5 to 5)
 
+        Assert.assertEquals(listOf(1, 2, 5, 3, 4), cycle.toList().toList())
+    }
+
+    @Test
+    fun `replace a segment with another one`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4, 5)).withNewNode()
+        val cut = cycle.replace(2 to 5, 6 to 6)
+        cycle.replace(1 to 2, cut!!)
+
+        Assert.assertEquals(listOf(1, 3, 4, 2, 6, 5), cycle.toList().toList())
+    }
+
+    @Test
+    fun `replace a segment with another one faster`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4, 5, 6)).withNewNode()
+        val cut = cycle.replace(2 to 5, 7 to 7, false)
+
+        Assert.assertEquals(listOf(1, 2, 7, 5, 6), cycle.toList().toList())
+        Assert.assertEquals(3 to 4, cut)
+    }
+
+    @Test
+    fun `replace a segment with a reversed other faster`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4, 5, 6)).withNewNode()
+        cycle.replace(2 to 5, 7 to 7, false)
+        val cut = cycle.replace(1 to 2, 3 to 4, true)
+        Assert.assertEquals(listOf(1, 4, 3, 2, 7, 5, 6), cycle.toList().toList())
+        Assert.assertEquals(null, cut)
+    }
+
+    @Test
+    fun `inserts a node into an edge faster`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4)).withNewNode()
+        val cut = cycle.replace(2 to 3, 5 to 5, false)
+
+        Assert.assertEquals(listOf(1, 2, 5, 3, 4), cycle.toList().toList())
+        Assert.assertEquals(null, cut)
+    }
+
+    @Test
+    fun `cycles to first beyond last node`() {
+        val cycle = cycleOf(listOf(1, 2, 3, 4, 5)).withNewNode()
+        cycle.replace(4 to 2, 6 to 6)
+
+        Assert.assertEquals(listOf(2, 3, 4, 6), cycle.toList(2).toList())
+    }
 }
