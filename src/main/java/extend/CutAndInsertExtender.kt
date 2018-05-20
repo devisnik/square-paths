@@ -4,39 +4,23 @@ import util.squareCache
 
 object CutAndInsertExtender {
 
-    private inline fun cutouts(source: IntArray): Sequence<Pair<Int, Int>> {
-        var distance = 1
-        var startIndex = 0
-        val max = source.size
+    private inline fun cutouts(cycle: Cycle, startNode: Int): Sequence<Pair<Int, Int>> {
+        var start = startNode
+        var end = cycle.next(start)
         return generateSequence {
-            if (distance > max / 2) return@generateSequence null
-            val pair = Pair(source[startIndex], source[(startIndex + distance) % max])
-            startIndex += 1
-            if (startIndex == max) {
-                startIndex = 0
-                distance += 1
+            if (start == end) return@generateSequence null
+            val pair = Pair(start, end)
+            start = cycle.next(start)
+            end = cycle.next(end)
+            if (start == startNode) {
+                end = cycle.next(end)
             }
             return@generateSequence pair
         }
     }
 
-    private inline fun extensions(source: IntArray, extendee: List<Int>): Sequence<Pair<Pair<Int, Int>, List<Int>>> =
-            cutouts(source)
-                    .filter { p ->
-                        val firstExtendee = extendee.first()
-                        val lastExtendee = extendee.last()
-                        isSquare(p.first, firstExtendee) && isSquare(p.second, lastExtendee)
-                                || isSquare(p.first, lastExtendee) && isSquare(p.second, firstExtendee)
-                    }
-                    .map { p ->
-                        if (isSquare(p.first, extendee.first()) && isSquare(p.second, extendee.last()))
-                            Pair(p, extendee)
-                        else
-                            Pair(p, extendee.reversed())
-                    }
-
-    private inline fun extensions(source: IntArray, extendee: Pair<Int, Int>): Sequence<Triple<Pair<Int, Int>, Pair<Int, Int>, Boolean>> =
-            cutouts(source)
+    private inline fun extensions(cycle: Cycle, startNode: Int, extendee: Pair<Int, Int>): Sequence<Triple<Pair<Int, Int>, Pair<Int, Int>, Boolean>> =
+            cutouts(cycle, startNode)
                     .filter { p ->
                         val firstExtendee = extendee.first
                         val lastExtendee = extendee.second
@@ -62,7 +46,7 @@ object CutAndInsertExtender {
 //        println("forbidden: $forbidden")
 //        println("current cycle ${cycle.toList().toList()}")
             try {
-                val (pair, segment, reverse) = extensions(cycle.toList(cycleStart), ext)
+                val (pair, segment, reverse) = extensions(cycle, cycleStart, ext)
                         .filterNot { e -> forbidden.contains(e.first) }
                         .first()
 //        println("${pair}: ${pair.distance(cycle)} $list")
